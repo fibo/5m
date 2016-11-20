@@ -4,10 +4,10 @@
 
 [![KLP](https://img.shields.io/badge/kiss-literate-orange.svg)](http://g14n.info/kiss-literate-programming)
 
-* [Installation](#installation) |
-* [Test](#test) |
-* [Annotated source](#annotated-source) |
-* [License](#license)
+[Installation](#installation) |
+[Test](#test) |
+[Annotated source](#annotated-source) |
+[License](#license)
 
 ## Installation
 
