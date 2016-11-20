@@ -1,0 +1,29 @@
+{
+  "name": "5m",
+  "version": "0.0.0",
+  "description": "is a near real time utility, 5mb or 5min logger util",
+  "author": {
+    "name": "Gianluca Casati",
+    "url": "http://g14n.info"
+  },
+  "main": "5m.js",
+  "scripts": {
+    "postversion": "git push origin v${npm_package_version}; npm publish; npm run push",
+    "test": "NODE_PATH=. node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fibo/5m.git"
+  },
+  "keywords": [
+    "logger",
+    "near",
+    "real",
+    "time"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fibo/5m/issues"
+  },
+  "homepage": "http://npm.im/5m"
+}

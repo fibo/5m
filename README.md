@@ -4,6 +4,20 @@
 
 [![KLP](https://img.shields.io/badge/kiss-literate-orange.svg)](http://g14n.info/kiss-literate-programming)
 
+## Installation
+
+```bash
+npm i 5m
+```
+
+## Test
+
+*NOTA BENE* tests will require at least five minutes to run.
+
+```bash
+npm t
+```
+
 ## Annotated source
 
 Store data in a namespaced buffer, as well as last time data was write and when is current time for a given namespace.
@@ -22,25 +36,27 @@ Create the **5m** function with the following signature
 
 * **@param** `{String}` namespace
 * **@param** `{Function}` write
-* **@param** `{Function}` [append]
 * **@returns** `{Function}` logger
 
-    function 5m (namespace, write, append) {
+Since *5m* is allowed as npm package name, but not as JavaScript identifier,
+using a roman number like *Vm* can be confusing, so maybe naming the function
+as *fiveM* is a good idea..
 
-Make sure *lastWrite* is initialized.
+    function fiveM (namespace, write) {
 
+Initialize *buffer* and *lastWrite*.
+
+      buffer[namespace] = ''
       lastWrite[namespace] = new Date()
 
-Default *append* function, parses data as JSON and append it to the buffer with a new line.
+Make sure no data is lost on exit.
 
-      if (typeof append === 'undefined') {
-        append = (buffer, data) => { buffer += JSON.parse(data) + '\n' }
-      }
+      process.on('exit', () => write(buffer[namespace]))
 
 Create the **logger** function with the following signature
 
 * **@param** `{*}` data
-      
+
       return function logger (data) {
 
 Set write time for current namespace.
@@ -49,7 +65,7 @@ Set write time for current namespace.
 
 Append data to named buffer.
 
-        append(buffer[namespace], data)
+        buffer[namespace] += data
 
 Check if there is some data and it is bigger than *5 MB* or it is older than *5 minutes*.
 
@@ -61,7 +77,7 @@ If yes, write data and clean up.
 
         if (thereIsSomeData && (exceededSpace || exceededTime)) {
           write(buffer[namespace])
-          
+
           delete buffer[namespace]
           lastWrite[namespace] = new Date()
         }
@@ -70,4 +86,4 @@ If yes, write data and clean up.
 
 Export it.
 
-    module.exports = 5m
+    module.exports = fiveM
