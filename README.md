@@ -4,6 +4,11 @@
 
 [![KLP](https://img.shields.io/badge/kiss-literate-orange.svg)](http://g14n.info/kiss-literate-programming)
 
+* [Installation](#installation) |
+* [Test](#test) |
+* [Annotated source](#annotated-source) |
+* [License](#license)
+
 ## Installation
 
 ```bash
@@ -20,9 +25,13 @@ npm t
 
 ## Annotated source
 
-Store data in a namespaced buffer, as well as last time data was write and when is current time for a given namespace.
+Store data in a namespaced buffer, as well as its function to flush data.
 
     var buffer = {}
+    var flush = {}
+
+Store last time data was write and when is current time for a given namespace.
+
     var lastWrite = {}
     var now = {}
 
@@ -31,6 +40,12 @@ express *5 MB* and *5 minutes* where aproximation is ok, since we want to achiev
 
     const fiveMb = 1024 * 1024 * 5
     const fiveMin = 300 * 1000
+
+Make sure no data is lost on exit.
+
+    process.on('exit', () => {
+      for (namespace in buffer) flush[namespace]()
+    })
 
 Create the **5m** function with the following signature
 
@@ -49,9 +64,14 @@ Initialize *buffer* and *lastWrite*.
       buffer[namespace] = ''
       lastWrite[namespace] = new Date()
 
-Make sure no data is lost on exit.
+Create the namespaced *flush* function: write data and clean up.
 
-      process.on('exit', () => write(buffer[namespace]))
+      flush[namespace] = () => {
+          write(buffer[namespace])
+
+          delete buffer[namespace]
+          lastWrite[namespace] = new Date()
+      }
 
 Create the **logger** function with the following signature
 
@@ -73,13 +93,10 @@ Check if there is some data and it is bigger than *5 MB* or it is older than *5 
         const exceededSpace = (buffer[namespace].length > fiveMb)
         const exceededTime = (fiveMin < now[namespace] - lastWrite[namespace])
 
-If yes, write data and clean up.
+If yes, flush it!
 
         if (thereIsSomeData && (exceededSpace || exceededTime)) {
-          write(buffer[namespace])
-
-          delete buffer[namespace]
-          lastWrite[namespace] = new Date()
+          flush[namespace]()
         }
       }
     }
@@ -87,3 +104,7 @@ If yes, write data and clean up.
 Export it.
 
     module.exports = fiveM
+
+## License
+
+[MIT](http://g14n.info/mit-license)
