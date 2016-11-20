@@ -1,6 +1,6 @@
 {
   "name": "5m",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "is a near real time utility, 5mb or 5min logger util",
   "author": {
     "name": "Gianluca Casati",
