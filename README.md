@@ -55,7 +55,7 @@ Create the **5m** function with the following signature
 
 Since *5m* is allowed as npm package name, but not as JavaScript identifier,
 using a roman number like *Vm* can be confusing, so maybe naming the function
-as *fiveM* is a good idea..
+as *fiveM* is a good idea.
 
     function fiveM (namespace, write) {
 
@@ -98,10 +98,11 @@ If yes, flush it!
         if (thereIsSomeData && (exceededSpace || exceededTime)) {
           flush[namespace]()
         }
-      }
-    }
 
 Export it.
+
+      }
+    }
 
     module.exports = fiveM
 
