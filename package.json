@@ -8,6 +8,7 @@
   },
   "main": "5m.js",
   "scripts": {
+    "lint": "standard *.js",
     "postversion": "git push origin v${npm_package_version}; npm publish; npm run push",
     "test": "NODE_PATH=. node test.js"
   },

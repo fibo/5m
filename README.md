@@ -44,7 +44,7 @@ express *5 MB* and *5 minutes* where aproximation is ok, since we want to achiev
 Make sure no data is lost on exit.
 
     process.on('exit', () => {
-      for (namespace in buffer) flush[namespace]()
+      for (var namespace in buffer) flush[namespace]()
     })
 
 Create the **5m** function with the following signature
@@ -67,10 +67,10 @@ Initialize *buffer* and *lastWrite*.
 Create the namespaced *flush* function: write data and clean up.
 
       flush[namespace] = () => {
-          write(buffer[namespace])
+        write(buffer[namespace])
 
-          delete buffer[namespace]
-          lastWrite[namespace] = new Date()
+        delete buffer[namespace]
+        lastWrite[namespace] = new Date()
       }
 
 Create the **logger** function with the following signature
