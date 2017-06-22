@@ -9,7 +9,7 @@
   "main": "5m.js",
   "scripts": {
     "lint": "standard *.js",
-    "postversion": "git push origin v${npm_package_version}; npm publish; gut push origin master",
+    "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master",
     "test": "FIVEM_TIMEOUT_MILLISECONDS=2000 NODE_PATH=. node test.js"
   },
   "repository": {
