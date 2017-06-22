@@ -26,9 +26,9 @@ Yes I know there are other cool tools like CloudWatch, Kinesis, etc.
 
 ## Annotated source
 
-Store data in a namespaced buffer, as well as its function to flush data.
+Store data in a namespaced bucket, as well as its function to flush data.
 
-    var buffer = {}
+    var bucket = {}
     var flush = {}
 
 Considering 1 char should be 1 byte, and dates are expressed in milliseconds,
@@ -45,7 +45,7 @@ via the `FIVEM_TIMEOUT_MILLISECONDS` environment variable.
 Make sure no data is lost on exit.
 
     process.on('exit', () => {
-      for (var namespace in buffer) flush[namespace]()
+      for (var namespace in bucket) flush[namespace]()
     })
 
 Create the **5m** function.
@@ -65,10 +65,10 @@ naming the function as *fiveM* is a good idea.
 Create the namespaced *flush* function: write data and clean up.
 
       flush[namespace] = () => {
-        if (buffer[namespace]) {
-          write(buffer[namespace])
+        if (bucket[namespace]) {
+          write(bucket[namespace])
 
-          delete buffer[namespace]
+          delete bucket[namespace]
         }
       }
 
@@ -79,21 +79,21 @@ Create the **logger** function.
        */
       return function logger (data) {
 
-If necessary, initialize data buffer and set timeout to flush it later.
+If necessary, initialize data bucket and set timeout to flush it later.
 
-        if (typeof buffer[namespace] === 'undefined') {
-          buffer[namespace] = ''
+        if (typeof bucket[namespace] === 'undefined') {
+          bucket[namespace] = ''
 
           setTimeout(flush[namespace], flushTimeout)
         }
 
-Append data to named buffer.
+Append data to named bucket.
 
-        buffer[namespace] += data
+        bucket[namespace] += data
 
 Check if data is bigger than *5 MB*.
 
-        const exceededSpace = buffer[namespace] && (buffer[namespace].length > 0) && (buffer[namespace].length > fiveMb)
+        const exceededSpace = bucket[namespace] && (bucket[namespace].length > 0) && (bucket[namespace].length > fiveMb)
 
 If yes, flush it!
 
