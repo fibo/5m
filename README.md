@@ -5,7 +5,7 @@
 [![KLP](https://img.shields.io/badge/kiss-literate-orange.svg)](http://g14n.info/kiss-literate-programming)
 
 [Installation](#installation) |
-[Test](#test) |
+[Use case](#use-case)
 [Annotated source](#annotated-source) |
 [License](#license)
 
@@ -15,13 +15,14 @@
 npm i 5m
 ```
 
-## Test
+## Use case
 
-*NOTA BENE* tests will require at least five minutes to run.
+> I use this package with [debug] and [aws-sdk] to upload logs on S3.
 
-```bash
-npm t
-```
+Then there is a trigger that feeds every file created on S3 to an AWS Lambda
+which sends file content to a server that broadcast it using [socket.io].
+Yes I know there are other cool tools like CloudWatch, Kinesis, etc.
+(but **5m** is free as in speach and free as in beer too ;)
 
 ## Annotated source
 
@@ -107,3 +108,7 @@ Export *5m* function.
 ## License
 
 [MIT](http://g14n.info/mit-license)
+
+[debug]: https://www.npmjs.com/package/debug "debug"
+[aws-sdk]: https://www.npmjs.com/package/aws-sdk "aws-sdk"
+[socket.io]: https://socket.io/ "socket.io"
