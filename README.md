@@ -5,7 +5,7 @@
 [![KLP](https://img.shields.io/badge/kiss-literate-orange.svg)](http://g14n.info/kiss-literate-programming)
 
 [Installation](#installation) |
-[Use case](#use-case)
+[Use case](#use-case) |
 [Annotated source](#annotated-source) |
 [License](#license)
 
