@@ -16,6 +16,7 @@ function fiveM (namespace, write) {
   flush[namespace] = () => {
     if (bucket[namespace]) {
       write(bucket[namespace])
+
       delete bucket[namespace]
     }
   }
@@ -25,6 +26,7 @@ function fiveM (namespace, write) {
   return function logger (data) {
     if (typeof bucket[namespace] === 'undefined') {
       bucket[namespace] = ''
+
       setTimeout(flush[namespace], flushTimeout)
     }
     bucket[namespace] += data

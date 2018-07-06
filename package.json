@@ -8,13 +8,14 @@
   },
   "main": "5m.js",
   "scripts": {
-    "lint": "standard *.js",
+    "lint": "standa",
+    "markdown2code": "markdown2code --lang javascript README.md > ${npm_package_main}",
     "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master",
     "test": "FIVEM_TIMEOUT_MILLISECONDS=2000 NODE_PATH=. node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fibo/5m.git"
+    "url": "git://github.com/fibo/5m.git"
   },
   "keywords": [
     "logger",
@@ -26,5 +27,9 @@
   "bugs": {
     "url": "https://github.com/fibo/5m/issues"
   },
-  "homepage": "http://g14n.info/5m"
+  "homepage": "http://g14n.info/5m",
+  "devDependencies": {
+    "markdown2code": "^0.3.0",
+    "standa": "^2.1.0"
+  }
 }

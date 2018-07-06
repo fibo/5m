@@ -28,8 +28,10 @@ Yes I know there are other cool tools like CloudWatch, Kinesis, etc.
 
 Store data in a namespaced bucket, as well as its function to flush data.
 
-    var bucket = {}
-    var flush = {}
+```javascript
+var bucket = {}
+var flush = {}
+```
 
 Considering 1 char should be 1 byte, and dates are expressed in milliseconds,
 the following constants express *5 MB* and *5 minutes*.
@@ -38,15 +40,19 @@ The timeout used for flushing data can be set, for testing or other purpouse
 via the `FIVEM_TIMEOUT_MILLISECONDS` environment variable.
 
 
-    const fiveMb = 1024 * 1024 * 5
-    const fiveMin = 300 * 1000
-    const flushTimeout = process.env.FIVEM_TIMEOUT_MILLISECONDS || fiveMin
+```javascript
+const fiveMb = 1024 * 1024 * 5
+const fiveMin = 300 * 1000
+const flushTimeout = process.env.FIVEM_TIMEOUT_MILLISECONDS || fiveMin
+```
 
 Make sure no data is lost on exit.
 
-    process.on('exit', () => {
-      for (var namespace in bucket) flush[namespace]()
-    })
+```javascript
+process.on('exit', () => {
+  for (var namespace in bucket) flush[namespace]()
+})
+```
 
 Create the **5m** function.
 
@@ -54,56 +60,72 @@ Since *5m* is allowed as npm package name, but not as JavaScript
 identifier, using a roman number like *Vm* can be confusing, so maybe
 naming the function as *fiveM* is a good idea.
 
-    /**
-     * **@param** `{String}` namespace
-     * **@param** `{Function}` write
-     *
-     * **@returns** `{Function}` logger
-     */
-    function fiveM (namespace, write) {
+```javascript
+/**
+ * **@param** `{String}` namespace
+ * **@param** `{Function}` write
+ *
+ * **@returns** `{Function}` logger
+ */
+function fiveM (namespace, write) {
+```
 
 Create the namespaced *flush* function: write data and clean up.
 
-      flush[namespace] = () => {
-        if (bucket[namespace]) {
-          write(bucket[namespace])
+```javascript
+  flush[namespace] = () => {
+    if (bucket[namespace]) {
+      write(bucket[namespace])
 
-          delete bucket[namespace]
-        }
-      }
+      delete bucket[namespace]
+    }
+  }
+```
 
 Create the **logger** function.
 
-      /**
-       * @param {*} data
-       */
-      return function logger (data) {
+```javascript
+  /**
+   * @param {*} data
+   */
+  return function logger (data) {
+```
 
 If necessary, initialize data bucket and set timeout to flush it later.
 
-        if (typeof bucket[namespace] === 'undefined') {
-          bucket[namespace] = ''
+```javascript
+    if (typeof bucket[namespace] === 'undefined') {
+      bucket[namespace] = ''
 
-          setTimeout(flush[namespace], flushTimeout)
-        }
+      setTimeout(flush[namespace], flushTimeout)
+    }
+```
 
 Append data to named bucket.
 
-        bucket[namespace] += data
+```javascript
+    bucket[namespace] += data
+```
 
 Check if data is bigger than *5 MB*.
 
-        const exceededSpace = bucket[namespace] && (bucket[namespace].length > 0) && (bucket[namespace].length > fiveMb)
+```javascript
+    const exceededSpace = bucket[namespace] && (bucket[namespace].length > 0) && (bucket[namespace].length > fiveMb)
+```
 
 If yes, flush it!
 
-        if (exceededSpace) flush[namespace]()
-      }
-    }
+```javascript
+    if (exceededSpace) flush[namespace]()
+  }
+}
+```
 
 Export *5m* function.
 
-    module.exports = fiveM
+```javascript
+module.exports = fiveM
+```
 
 ## License
 
