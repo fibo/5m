@@ -24,6 +24,56 @@ which sends file content to a server that broadcast it using [socket.io].
 Yes I know there are other cool tools like CloudWatch, Kinesis, etc.
 (but **5m** is free as in speach and free as in beer too ;)
 
+The cool part is that it is possible to trigger an AWS Lambda every time
+a new file is created, and for example load it on a database.
+
+Here is an example code to achieve logging and upload on S3.
+
+```js
+// File: log.js
+//
+// Prints to STDOUT if DEBUG environment variable is set properly.
+// Uploads logs on some S3 bucket.
+//
+//     const log = require('./log')
+//     log('Hello world')
+//
+
+const AWS = require('aws-sdk')
+const debug = require('debug')
+const fiveM = require('5m')
+
+const s3 = new AWS.S3()
+
+// Use package name as namespace for logging, just as an example.
+const pkg = require('./package.json')
+const namespace = pkg.name
+const debug5m = debug(`${namespace}:5m`)
+const debugPkg = debug(namespace)
+
+const writeOnS3 = (data) => {
+  const Bucket = 'my-bucket'
+
+  const tstamp = new Date().getTime()
+  const Key = `my/path/${tstamp}.log`
+
+  s3.upload({ Bucket, Key }, error => {
+    if (error) debug5m(error)
+    else debug5m()
+  })
+}
+
+function log (message) {
+  const tstamp = new Date().getTime()
+  const record = `${tstamp} ${namespace} ${message}`
+
+  fiveM(namespace, writeOnS3)(record)
+  debugPkg(message)
+}
+
+module.exports = log
+```
+
 ## Annotated source
 
 Store data in a namespaced bucket, as well as its function to flush data.
